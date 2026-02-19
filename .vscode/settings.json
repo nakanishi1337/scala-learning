@@ -1,0 +1,8 @@
+{
+  "code-runner.executorMap": {
+    "scala": "cd $dirWithoutTrailingSlash/../../.. && sbt run"
+  },
+  "files.watcherExclude": {
+    "**/target": true
+  }
+}

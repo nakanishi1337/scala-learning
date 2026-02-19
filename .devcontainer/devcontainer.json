@@ -1,0 +1,15 @@
+{
+    "name": "Scala Dev",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "scala-lang.scala",
+                "scalameta.metals",
+                "formulahendry.code-runner"
+            ]
+        }
+    }
+}
