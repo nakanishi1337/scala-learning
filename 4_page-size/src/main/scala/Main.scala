@@ -11,6 +11,15 @@ object PageLoader {
       case e: Exception => -1
     }
   }
+
+  def getLinkCount(url: String) = {
+    try {
+      val content = Source.fromURL(url).mkString
+      "<a[^>]*href".r.findAllIn(content).length
+    } catch {
+      case e: Exception => 0
+    }
+  }
 }
 
 object Main {
@@ -30,20 +39,24 @@ object Main {
 
   def getPageSizeSequentially() = {
     urls.foreach { url =>
-      println(s"Size for $url: ${PageLoader.getPageSize(url)}")
+      val size = PageLoader.getPageSize(url)
+      val links = PageLoader.getLinkCount(url)
+      println(s"Size for $url: $size, Links: $links")
     }
   }
 
   def getPageSizeConcurrently() = {
     val futures = urls.map { url =>
       Future {
-        (url, PageLoader.getPageSize(url))
+        val size = PageLoader.getPageSize(url)
+        val links = PageLoader.getLinkCount(url)
+        (url, size, links)
       }
     }
 
     val allResults = Future.sequence(futures)
-    Await.result(allResults, 30.seconds).foreach { case (url, size) =>
-      println(s"Size for $url: $size")
+    Await.result(allResults, 30.seconds).foreach { case (url, size, links) =>
+      println(s"Size for $url: $size, Links: $links")
     }
   }
 
